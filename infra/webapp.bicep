@@ -1,4 +1,4 @@
-param webAppName string = 'eshoponweb-webapp56634890' // Generate unique String for web app name
+param webAppName string = 'ehoponweb98653214' // Generate unique String for web app name
 param sku string = 'S1' // The SKU of App Service Plan
 param location string = resourceGroup().location
 
