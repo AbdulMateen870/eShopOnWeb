@@ -1,5 +1,6 @@
 name: eShopOnWeb Build and Test
 #1
+#2
 #Triggers (uncomment line below to use it)
 on: [push, workflow_dispatch]
 #Service principals are updated
