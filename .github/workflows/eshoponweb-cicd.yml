@@ -3,6 +3,7 @@ name: eShopOnWeb Build and Test
 #Triggers (uncomment line below to use it)
 on: [push, workflow_dispatch]
 #Service principals are updated
+#app test
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
   RESOURCE-GROUP: AZ-400
