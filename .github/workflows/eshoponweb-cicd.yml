@@ -6,7 +6,7 @@ on: [push, workflow_dispatch]
 #app test
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
-  RESOURCE-GROUP: az-400-rg
+  RESOURCE-GROUP: az-400-demo
   LOCATION: westus3
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 2ab786df-e0cc-4f70-ba1a-e17fd00e5d3b
