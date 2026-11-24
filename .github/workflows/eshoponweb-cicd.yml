@@ -25,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
           dotnet-quality: "preview"
 
       #Build/Test/Publish the .net project
@@ -68,9 +68,6 @@ jobs:
           name: bicep-template
           path: ${{ env.TEMPLATE-FILE }}
 
-  # =====================================================
-  # DEPLOY (must be Linux because of Azure/cli@v2)
-  # =====================================================
   deploy:
     runs-on: ubuntu-latest          # <-- REQUIRED for Azure/cli@v2
     needs: buildandtest
