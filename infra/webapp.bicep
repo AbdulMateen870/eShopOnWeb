@@ -7,21 +7,20 @@ var appServicePlanName = toLower('AppServicePlan-${webAppName}')
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
   location: location
-  properties: {
-    reserved: true
-  }
   sku: {
     name: sku
   }
+  // No "reserved: true" → this creates a Windows App Service Plan
 }
+
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webAppName
-  kind: 'app'
+  kind: 'app'                    // Windows Web App
   location: location
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'DOTNETCORE|8.0'
+      netFrameworkVersion: 'v10.0'   // .NET 8 on Windows
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
