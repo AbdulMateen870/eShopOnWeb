@@ -11,7 +11,7 @@ env:
   LOCATION: westus3
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 2ab786df-e0cc-4f70-ba1a-e17fd00e5d3b
-  WEBAPP-NAME: dxcapplication
+  WEBAPP-NAME: dxc1application
 
 jobs:
   #Build, test and publish .net web project in repository
