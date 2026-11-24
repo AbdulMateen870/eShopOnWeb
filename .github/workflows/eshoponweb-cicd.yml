@@ -16,7 +16,7 @@ env:
 jobs:
   #Build, test and publish .net web project in repository
   buildandtest:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       #checkout the repository
       - uses: actions/checkout@v5
@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
           dotnet-quality: "preview"
       #Build/Test/Publish the .net project
       - name: Build with dotnet
@@ -52,7 +52,7 @@ jobs:
 
   # Use Bicep to deploy infrastructure + Publish webapp
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: buildandtest
     environment:
       name: "Development"
@@ -96,10 +96,11 @@ jobs:
           type: ZIP
           app-name: ${{ env.WEBAPP-NAME  }}
           package: .net-app/app.zip
+          
 
       # Publish website to Azure App Service using CLI (WebApp)
       - name: Publish Website to WebApp
-        uses: Azure/cli@v2
-        with:
-          inlineScript: |
+        shell: pwsh
+        run: |
+          az  --version
             az webapp deploy --name ${{ env.WEBAPP-NAME }} --resource-group ${{ env.RESOURCE-GROUP }} --src-path .net-app/app.zip --type zip
