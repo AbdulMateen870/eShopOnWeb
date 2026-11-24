@@ -1,4 +1,4 @@
-param appserviceName string = 'dxcapplication'
+param webappname string = 'dxc1application'
 param location string = 'westus3'
 
 var suffix = uniqueString(resourceGroup().id)
@@ -18,7 +18,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
 }
 
 resource appService 'Microsoft.Web/sites@2023-12-01' = {
-	name: appserviceName
+	name: webappname
 	location: location
 	kind: 'app'
 	properties: {
