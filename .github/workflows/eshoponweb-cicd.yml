@@ -68,35 +68,33 @@ jobs:
           name: bicep-template
           path: ${{ env.TEMPLATE-FILE }}
 
-  # Use Bicep to deploy infrastructure + Publish webapp
+  # =====================================================
+  # DEPLOY (must be Linux because of Azure/cli@v2)
+  # =====================================================
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest          # <-- REQUIRED for Azure/cli@v2
     needs: buildandtest
     environment:
       name: "Development"
     steps:
-      #Download the publish files created in previous job
-      - name: Download artifact from build job
+      - name: Download .NET app artifact
         uses: actions/download-artifact@v6
         with:
           name: .net-app
           path: .net-app
 
-      #Download the bicep templates from previous job
-      - name: Download artifact from build job
+      - name: Download Bicep template
         uses: actions/download-artifact@v6
         with:
           name: bicep-template
           path: bicep-template
 
-      #Login in your azure subscription using a service principal (credentials stored as GitHub Secret in repo)
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Deploy Azure WebApp using Bicep file
-      - name: deploy
+      - name: Deploy infrastructure with Bicep
         uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ env.SUBSCRIPTION-ID }}
@@ -105,19 +103,22 @@ jobs:
           parameters: "webAppName=${{ env.WEBAPP-NAME }} location=${{ env.LOCATION }}"
           failOnStdErr: false
 
-      # Publish website to Azure App Service (WebApp)
-      # Step disabled due to issue where the site sometimes can't be found: https://github.com/microsoft/pipelines-appservice-lib/issues/56. Instead deploy using CLI
-      - name: Publish Website to WebApp
-        if: false #Disable step due to comment above
+      # Disabled step (kept for reference)
+      - name: Publish Website to WebApp (disabled)
+        if: false
         uses: Azure/webapps-deploy@v3
         with:
           type: ZIP
           app-name: ${{ env.WEBAPP-NAME }}
           package: .net-app/app.zip
 
-      # Publish website to Azure App Service using CLI (WebApp)
-      - name: Publish Website to WebApp
+      - name: Publish Website to WebApp (using Azure CLI)
         uses: Azure/cli@v2
         with:
           inlineScript: |
+            az webapp deploy \
+              --name ${{ env.WEBAPP-NAME }} \
+              --resource-group ${{ env.RESOURCE-GROUP }} \
+              --src-path .net-app/app.zip \
+              --type zip
             az webapp deploy --name ${{ env.WEBAPP-NAME }} --resource-group ${{ env.RESOURCE-GROUP }} --src-path .net-app/app.zip --type zip
