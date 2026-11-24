@@ -4,6 +4,7 @@ name: eShopOnWeb Build and Test
 on: [push, workflow_dispatch]
 #Service principals are updated
 #app test
+#second run
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
   RESOURCE-GROUP: AZ-400-RG
