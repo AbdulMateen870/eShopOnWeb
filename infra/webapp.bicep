@@ -1,36 +1,37 @@
-param webappname string = 'dxc1application'
-param location string = 'westus3'
+param webAppName string = 'dxcapplication' 
+param sku string = 'S1' // The SKU of App Service Plan
+param location string = resourceGroup().location
 
-var suffix = uniqueString(resourceGroup().id)
+var appServicePlanName = toLower('AppServicePlan-${webAppName}')
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
-	name: 'asp-${suffix}'
-	location: location
-	kind: 'windows'
-	sku: {
-		name: 'P1v3'
-		tier: 'PremiumV3'
-		capacity: 1
-	}
-	properties: {
-		reserved: false
-	}
+resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
+  name: appServicePlanName
+  location: location
+  properties: {
+    reserved: true
+  }
+  sku: {
+    name: sku
+  }
 }
-
-resource appService 'Microsoft.Web/sites@2023-12-01' = {
-	name: webappname
-	location: location
-	kind: 'app'
-	properties: {
-		serverFarmId: appServicePlan.id
-		httpsOnly: true
-		siteConfig: {
-			alwaysOn: true
-			minTlsVersion: '1.2'
-			windowsFxVersion: 'DOTNETCORE|8.0'
-		}
-	}
+resource appService 'Microsoft.Web/sites@2022-09-01' = {
+  name: webAppName
+  kind: 'app'
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      linuxFxVersion: 'DOTNETCORE|8.0'
+      appSettings: [
+        {
+          name: 'ASPNETCORE_ENVIRONMENT'
+          value: 'Development'
+        }
+        {
+          name: 'UseOnlyInMemoryDatabase'
+          value: 'true'
+        }
+      ]
+    }
+  }
 }
-
-output appServiceName string = appService.name
-output appServiceUrl string = 'https://${appService.properties.defaultHostName}'
