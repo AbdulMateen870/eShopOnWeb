@@ -7,11 +7,11 @@ on: [push, workflow_dispatch]
 #second run
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
-  RESOURCE-GROUP: AZ-400-RG
+  RESOURCE-GROUP: AZ-400-demo
   LOCATION: westus3
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 2ab786df-e0cc-4f70-ba1a-e17fd00e5d3b
-  WEBAPP-NAME: dxc1application
+  WEBAPP-NAME: dxcapplication8707
 
 jobs:
   #Build, test and publish .net web project in repository
@@ -25,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "10.0.x"
+          dotnet-version: "8.0.x"
           dotnet-quality: "preview"
 
       #Build/Test/Publish the .net project
